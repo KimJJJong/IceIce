@@ -68,7 +68,7 @@ public class TimeManager : MonoBehaviour
 
         isPlaying = false;
 
-        UIManager.Instance.ShowGameOverPanel(remainingTime);
+        UIManager.Instance.ShowGameOverFail_Panel(remainingTime);
 
         OnGameEnd?.Invoke();
     }
