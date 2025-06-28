@@ -32,11 +32,6 @@ public class icicle : MonoBehaviour
         // 스프라이트 크기 계산
         spriteWidth = GetComponent<SpriteRenderer>().bounds.size.x;
         spriteHeight = GetComponent<SpriteRenderer>().bounds.size.y;
-
-        if (bottomPlatform == null)
-        {
-            Debug.LogError("bottomPlatform이 연결되지 않았습니다!");
-        }
     }
 
     void Update()

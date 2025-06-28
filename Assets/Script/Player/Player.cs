@@ -10,26 +10,50 @@ public class Player : MonoBehaviour
     public Sprite Player_jump;
 
     private SpriteRenderer sr;
+    private Rigidbody2D rb;
+    private BoxCollider2D col;
 
     public float moveSpeed = 3f;
+    public float jumpForce = 7f;
     public float animationInterval = 0.2f;
 
     private float animationTimer = 0f;
     private int walkFrameIndex = 0;
 
     private bool isJumping = false;
+    private bool isGrounded = false;
+
+    public GameObject bottomPlatform;
 
     void Start()
     {
-        transform.position = new Vector3(0, 0, 0);
         sr = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<BoxCollider2D>();
+
         sr.sprite = Player_standing;
+        rb.gravityScale = 0;
+
+        // platform 위로 올려놓기
+        SpriteRenderer platformRenderer = bottomPlatform.GetComponent<SpriteRenderer>();
+        float platformTopY = bottomPlatform.transform.position.y + platformRenderer.bounds.size.y / 2f;
+        float spriteHeight = sr.bounds.size.y;
+
+        transform.position = new Vector3(-4, platformTopY + spriteHeight / 2f - 0.05f, 0);
     }
 
     void Update()
     {
+        CheckPlatformBoundary();
+
         HandleMove();
-        HandleJump();
+
+        if (isGrounded && Input.GetKeyDown(KeyCode.W))
+        {
+            Jump();
+        }
+
+        UpdateSprite();
     }
 
     void HandleMove()
@@ -39,88 +63,83 @@ public class Player : MonoBehaviour
         if (h != 0)
         {
             sr.flipX = (h < 0);
-            transform.Translate(h * moveSpeed * Time.deltaTime, 0, 0);
+            rb.velocity = new Vector2(h * moveSpeed, rb.velocity.y);
+        }
+        else
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+    }
 
-            if (!isJumping)
+    void Jump()
+    {
+        rb.gravityScale = 1;
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        isJumping = true;
+        isGrounded = false;
+    }
+
+    void UpdateSprite()
+    {
+        if (!isGrounded)
+        {
+            sr.sprite = Player_jump;
+            return;
+        }
+
+        float h = Input.GetAxisRaw("Horizontal");
+
+        if (h != 0)
+        {
+            animationTimer += Time.deltaTime;
+            if (animationTimer >= animationInterval)
             {
-                animationTimer += Time.deltaTime;
-                if (animationTimer >= animationInterval)
-                {
-                    walkFrameIndex = (walkFrameIndex + 1) % 4;
-
-                    switch (walkFrameIndex)
-                    {
-                        case 0:
-                        case 2:
-                            sr.sprite = Player_standing;
-                            break;
-                        case 1:
-                            sr.sprite = Player_walking1;
-                            break;
-                        case 3:
-                            sr.sprite = Player_walking2;
-                            break;
-                    }
-
-                    animationTimer = 0f;
-                }
-            }
-            else
-            {
-                // 점프 중에는 항상 점프 스프라이트
-                sr.sprite = Player_jump;
+                walkFrameIndex = (walkFrameIndex + 1) % 2;
+                sr.sprite = (walkFrameIndex == 0) ? Player_walking1 : Player_walking2;
+                animationTimer = 0f;
             }
         }
         else
         {
-            if (!isJumping)
-            {
-                sr.sprite = Player_standing;
-            }
-
-            walkFrameIndex = 0;
+            sr.sprite = Player_standing;
             animationTimer = 0f;
         }
     }
 
-    void HandleJump()
+    void CheckPlatformBoundary()
     {
-        if (!isJumping && Input.GetKeyDown(KeyCode.W))
+        SpriteRenderer platformRenderer = bottomPlatform.GetComponent<SpriteRenderer>();
+
+        float platformLeft = bottomPlatform.transform.position.x - platformRenderer.bounds.size.x / 2f;
+        float platformRight = bottomPlatform.transform.position.x + platformRenderer.bounds.size.x / 2f;
+
+        float platformTopY = bottomPlatform.transform.position.y + platformRenderer.bounds.size.y / 2f;
+        float playerBottomY = transform.position.y - sr.bounds.size.y / 2f;
+
+        float playerX = transform.position.x;
+
+        // x범위 밖이고 y도 아래 있지 않다면 중력 적용
+        if (playerX < platformLeft || playerX > platformRight || playerBottomY > platformTopY + 0.05f)
         {
-            isJumping = true;
-            StartCoroutine(JumpCoroutine());
+            rb.gravityScale = 1;
+            isGrounded = false;
         }
     }
 
-    IEnumerator JumpCoroutine()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        float jumpHeight = 2f;
-        float jumpSpeed = 5f;
-        float progress = 0f;
-
-        sr.sprite = Player_jump;
-
-        // 위로 점프
-        while (progress < jumpHeight)
+        if (collision.gameObject == bottomPlatform)
         {
-            float step = jumpSpeed * Time.deltaTime;
-            transform.Translate(0, step, 0);
-            progress += step;
-            yield return null;
+            isGrounded = true;
+            isJumping = false;
+            rb.gravityScale = 0;
+
+            // 정확한 착지 보정
+            SpriteRenderer platformRenderer = bottomPlatform.GetComponent<SpriteRenderer>();
+            float platformTopY = bottomPlatform.transform.position.y + platformRenderer.bounds.size.y / 2f;
+            float spriteHeight = sr.bounds.size.y;
+
+            transform.position = new Vector3(transform.position.x, platformTopY + spriteHeight / 2f - 0.01f, transform.position.z);
         }
-
-        yield return new WaitForSeconds(0.1f); // 공중 정지
-
-        // 착지
-        while (progress > 0f)
-        {
-            float step = jumpSpeed * Time.deltaTime;
-            transform.Translate(0, -step, 0);
-            progress -= step;
-            yield return null;
-        }
-
-        isJumping = false;
-        sr.sprite = Player_standing;
     }
 }
