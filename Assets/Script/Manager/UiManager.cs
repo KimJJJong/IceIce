@@ -2,14 +2,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
     [Header("UI Panels")]
-    [SerializeField] private GameObject startPanel; // In Start Scene
-    [SerializeField] private GameObject hudPanel;   // May be in Page Scene
-    [SerializeField] private GameObject gameOverPanel; // with inGame Scene
+    [SerializeField] private GameObject puzzlePagePanel; 
+    [SerializeField] private GameObject movePagePanel;   
+    [SerializeField] private GameObject gameOverPanel; 
 
 
     [Header("HUD Elements")]       // inGame Ui
@@ -31,7 +32,7 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        ShowStartMenu();
+        EnterPuzzle();
     }
 
     private void Start()
@@ -42,10 +43,10 @@ public class UIManager : MonoBehaviour
 
     #region 시작 화면 & 설정
 
-    public void ShowStartMenu()
+    public void EnterPuzzle()
     {
-        startPanel.SetActive(true);
-        hudPanel.SetActive(false);
+        puzzlePagePanel.SetActive(true);
+        movePagePanel.SetActive(false);
         gameOverPanel.SetActive(false);
     }
 
@@ -53,7 +54,11 @@ public class UIManager : MonoBehaviour
 
     public void OnClickStartButton()
     {
-        //SceneManager.Instance.GoToPage();
+        puzzlePagePanel.SetActive(false);
+        movePagePanel.SetActive(true);
+        gameOverPanel.SetActive(false);
+
+        TimeManager.Instance.StartGame();
     }
 
 
@@ -62,10 +67,7 @@ public class UIManager : MonoBehaviour
 
     #region HUD
 
-    public void ShowHUD(bool show)
-    {
-        hudPanel.SetActive(show);
-    }
+
 
     public void UpdateTime(float time)
     {
@@ -78,34 +80,28 @@ public class UIManager : MonoBehaviour
     }
 
 
-/*    public void ShowFloatingText(Vector3 worldPos, int amount)
-    {
-        if (floatingTextPrefab == null) return;
 
-        GameObject obj = Instantiate(floatingTextPrefab, worldPos, Quaternion.Euler(0, 180, 0));
-        obj.GetComponentInChildren<TextMeshProUGUI>().text = $"+{amount}";
-        Destroy(obj, 1.5f); // 자동 제거
-    }
-*/
     #endregion
 
     #region 게임 오버
 
-    public void ShowGameOverPanel(int finalScore)
+    public void ShowGameOverPanel(float finalScore)
     {
-        hudPanel.SetActive(false);
+        movePagePanel.SetActive(false);
         gameOverPanel.SetActive(true);
-        finalScoreText.text = $"Final Score: {finalScore}";
+        finalScoreText.text = $"Final Score: {finalScore.ToString("F1")}";
     }
 
     public void OnClickRestartButton()
     {
-        ShowStartMenu();  // restart
+        //  ShowStartMenu();  // restart 그냥 Scene재 로드? 귀찮은뎅
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         AudioManager.Instance.PlayBGM("BGM_Lobby");
     }
-    public void OnClickGoToPageButton()
+
+    public void OnClickSelectLevel()
     {
-        //SceneManager.Instacne.GoToPage();
+        SceneManager.LoadScene("PageSelectScene");
     }
 
     #endregion

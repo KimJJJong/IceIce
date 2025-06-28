@@ -49,7 +49,6 @@ public class TimeManager : MonoBehaviour
         remainingTime = gameDuration;
         isPlaying = true;
 
-        UIManager.Instance.ShowHUD(true);
         UIManager.Instance.UpdateTime(remainingTime);
         
         ScoreManager.Instance.InitScore();
@@ -69,7 +68,7 @@ public class TimeManager : MonoBehaviour
 
         isPlaying = false;
 
-        UIManager.Instance.ShowGameOverPanel(ScoreManager.Instance.CurrentScore);
+        UIManager.Instance.ShowGameOverPanel(remainingTime);
 
         OnGameEnd?.Invoke();
     }
