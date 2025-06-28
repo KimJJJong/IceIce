@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 352768730656796949}
   - component: {fileID: 2717395529179002252}
   - component: {fileID: 3491204512964886083}
-  - component: {fileID: 8477747254440019864}
+  - component: {fileID: 2708961570635818066}
   m_Layer: 0
   m_Name: LineDrag
   m_TagString: Untagged
@@ -179,7 +179,7 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
---- !u!114 &8477747254440019864
+--- !u!114 &2708961570635818066
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,6 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2a5a1b12c8b0a42b8f8454ed7267f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyDelay: 0.2
+  destroyDelay: 1
   lineThickness: 0.1
   lineMaterial: {fileID: 2100000, guid: ca4b8e804306ff340b09291645317069, type: 2}
+  minLength: 1

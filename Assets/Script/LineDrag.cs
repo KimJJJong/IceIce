@@ -2,11 +2,12 @@ using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(EdgeCollider2D))]
-public class DragLine : MonoBehaviour
+public class LineDrag : MonoBehaviour
 {
     [SerializeField] private float destroyDelay = 1f;
     [SerializeField] private float lineThickness = 0.1f;
     [SerializeField] private Material lineMaterial;
+    [SerializeField] private float minLength = 1f;
 
     private LineRenderer lineRenderer;
     private EdgeCollider2D edgeCollider;
@@ -42,6 +43,20 @@ public class DragLine : MonoBehaviour
     public void FinalizeDraw()
     {
         Vector2[] colliderPoints = { startPos, endPos };
+
+        float distance = Vector2.Distance(startPos, endPos);
+
+        Debug.Log($"{distance}  minLenght : {minLength}");
+
+
+        if (distance < minLength)
+        {
+            Debug.Log("It to Short");
+            Destroy(gameObject);  // 너무 짧으면 바로 제거
+            return;
+        }
+
+
         edgeCollider.points = colliderPoints;
 
         Destroy(gameObject, destroyDelay);  // 선 개별 제거

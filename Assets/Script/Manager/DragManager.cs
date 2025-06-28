@@ -4,7 +4,7 @@ public class DragManager : MonoBehaviour
 {
     [SerializeField] private GameObject linePrefab;
 
-    private DragLine currentLine;
+    private LineDrag currentLine;
 
     void Update()
     {
@@ -26,7 +26,7 @@ public class DragManager : MonoBehaviour
     private void StartDraw()
     {
         GameObject lineObj = Instantiate(linePrefab);
-        currentLine = lineObj.GetComponent<DragLine>();
+        currentLine = lineObj.GetComponent<LineDrag>();
         currentLine.StartDraw();
     }
 }
