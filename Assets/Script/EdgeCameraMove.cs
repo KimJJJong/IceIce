@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class EdgeCameraMove : MonoBehaviour
 {
+    public static EdgeCameraMove Instance = new EdgeCameraMove();
+
     [Header("카메라 이동 설정")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float edgeThreshold = 30f;
@@ -23,13 +25,25 @@ public class EdgeCameraMove : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private Camera cam;
 
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+    }
+
     void Start()
     {
         cam = Camera.main;
         targetPos = transform.position;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (followPlayer)
         {

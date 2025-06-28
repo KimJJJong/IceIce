@@ -19,6 +19,8 @@ public class icicle : MonoBehaviour
             {
                 rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.freezeRotation = true;
+                rb.mass = 50;
+                AudioManager.Instance.PlaySFX("SFX_Drop_Icicle");
             }
             else
             {

@@ -16,7 +16,7 @@ public class FlyingPlatform : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;  // 초기 정지
-        if (speed < 0)
+        if (speed > 0)
         {
             Vector3 scale = transform.localScale;
             scale.x = -Mathf.Abs(scale.x);  
@@ -29,6 +29,8 @@ public class FlyingPlatform : MonoBehaviour
         if (!isFlying)
         {
             Launch();
+            AudioManager.Instance.PlaySFX("SFX_NorwhalClick");
+            AudioManager.Instance.PlaySFX("SFX_NorwhalFly");
         }
     }
 
@@ -55,6 +57,7 @@ public class FlyingPlatform : MonoBehaviour
         rb.velocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Static;
         Debug.Log("플랫폼 벽에 고정");
+        AudioManager.Instance.PlaySFX("SFX_NorwhalStuck");
 
         //Destroy(gameObject, destroyDelay);
     }

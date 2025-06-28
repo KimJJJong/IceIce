@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     [Header("Drag Manager")]
     [SerializeField] private GameObject dragManager;
 
+    public bool isStartGame = false;
 
     private void Awake()
     {
@@ -56,6 +57,8 @@ public class UIManager : MonoBehaviour
         gameOverFail_Panel.SetActive(false);
 
         dragManager.SetActive(true);
+
+        isStartGame = false;
     }
 
 
@@ -70,7 +73,11 @@ public class UIManager : MonoBehaviour
 
         dragManager.SetActive(false);
 
+        isStartGame = true;
+
         TimeManager.Instance.StartGame();
+
+        EdgeCameraMove.Instance.SetFollowPlayer(true);
 
         AudioManager.Instance.PlaySFX("SFX_ButtonClick");
     }

@@ -65,6 +65,7 @@ public class TimeManager : MonoBehaviour
 
         Debug.Log("[GameManager] 게임 종료");
 
+        UIManager.Instance.isStartGame = false;
 
         isPlaying = false;
 
@@ -72,7 +73,21 @@ public class TimeManager : MonoBehaviour
 
         OnGameEnd?.Invoke();
     }
+    public void EndGameClear()
+    {
+        if (!isPlaying) return;
 
+        Debug.Log("[GameManager] 게임 종료");
+
+        UIManager.Instance.isStartGame = false;
+
+        isPlaying = false;
+
+        UIManager.Instance.ShowGameOverClear_Panel(remainingTime);
+
+        OnGameEnd?.Invoke();
+    }
+    
     /// <summary>
     /// 외부에서 강제 종료 (체력 0 등)
     /// </summary>

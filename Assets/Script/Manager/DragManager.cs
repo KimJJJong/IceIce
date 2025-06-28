@@ -20,6 +20,7 @@ public class DragManager : MonoBehaviour
         {
             currentLine.FinalizeDraw();
             currentLine = null;
+            AudioManager.Instance.PlaySFX("SFX_Slash");
         }
     }
 
