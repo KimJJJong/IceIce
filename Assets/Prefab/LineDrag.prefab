@@ -195,3 +195,4 @@ MonoBehaviour:
   lineThickness: 0.1
   lineMaterial: {fileID: 2100000, guid: ca4b8e804306ff340b09291645317069, type: 2}
   minLength: 1
+  collisionObjPrefab: {fileID: 6308205142293927315, guid: dd5d5ba63cf6f8144b05cd385102eba5, type: 3}
