@@ -34,17 +34,25 @@ public class Player : MonoBehaviour
         sr.sprite = Player_standing;
         rb.gravityScale = 0;
 
-        // platform 위로 올려놓기
-        SpriteRenderer platformRenderer = bottomPlatform.GetComponent<SpriteRenderer>();
-        float platformTopY = bottomPlatform.transform.position.y + platformRenderer.bounds.size.y / 2f;
-        float spriteHeight = sr.bounds.size.y;
+        // Collider 기준으로 platform 위에 위치시키기
+        Collider2D platformCol = bottomPlatform.GetComponent<Collider2D>();
 
-        transform.position = new Vector3(-4, platformTopY + spriteHeight / 2f - 0.05f, 0);
+        float platformTopY = platformCol.bounds.max.y; // 플랫폼 상단 Y
+        float playerHalfHeight = col.bounds.extents.y; // 플레이어 반 높이
+
+        transform.position = new Vector3(-4, platformTopY + playerHalfHeight + 0.01f, 0);
+        
     }
+
 
     void Update()
     {
-        CheckPlatformBoundary();
+        Collider2D platformCol = bottomPlatform.GetComponent<Collider2D>();
+
+        float platformTopY = platformCol.bounds.max.y; // 플랫폼 상단 Y
+        float playerHalfHeight = col.bounds.extents.y; // 플레이어 반 높이
+
+        transform.position = new Vector3(-4, platformTopY + playerHalfHeight + 0.01f, 0);
 
         HandleMove();
 
@@ -106,40 +114,40 @@ public class Player : MonoBehaviour
         }
     }
 
-    void CheckPlatformBoundary()
-    {
-        SpriteRenderer platformRenderer = bottomPlatform.GetComponent<SpriteRenderer>();
-
-        float platformLeft = bottomPlatform.transform.position.x - platformRenderer.bounds.size.x / 2f;
-        float platformRight = bottomPlatform.transform.position.x + platformRenderer.bounds.size.x / 2f;
-
-        float platformTopY = bottomPlatform.transform.position.y + platformRenderer.bounds.size.y / 2f;
-        float playerBottomY = transform.position.y - sr.bounds.size.y / 2f;
-
-        float playerX = transform.position.x;
-
-        // x범위 밖이고 y도 아래 있지 않다면 중력 적용
-        if (playerX < platformLeft || playerX > platformRight || playerBottomY > platformTopY + 0.05f)
-        {
-            rb.gravityScale = 1;
-            isGrounded = false;
-        }
-    }
-
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject == bottomPlatform)
+        if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
             isJumping = false;
             rb.gravityScale = 0;
 
             // 정확한 착지 보정
-            SpriteRenderer platformRenderer = bottomPlatform.GetComponent<SpriteRenderer>();
-            float platformTopY = bottomPlatform.transform.position.y + platformRenderer.bounds.size.y / 2f;
-            float spriteHeight = sr.bounds.size.y;
+            float groundTopY = collision.collider.bounds.max.y;
+            float playerHalfHeight = col.bounds.extents.y;
 
-            transform.position = new Vector3(transform.position.x, platformTopY + spriteHeight / 2f - 0.01f, transform.position.z);
+            transform.position = new Vector3(
+                transform.position.x,
+                groundTopY + playerHalfHeight,
+                transform.position.z
+            );
+        }
+        else
+        {
+            // 다른 오브젝트와 충돌 시 중력 적용
+            rb.gravityScale = 1;
         }
     }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+            rb.gravityScale = 1;
+        }
+    }
+
+
+
 }

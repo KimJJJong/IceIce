@@ -14,6 +14,7 @@ public class bottom_Platform : MonoBehaviour
         // 스프라이트 크기 계산
         spriteWidth = GetComponent<SpriteRenderer>().bounds.size.x;
         spriteHeight = GetComponent<SpriteRenderer>().bounds.size.y;
+        gameObject.tag = "Ground";
     }
 
     // Update is called once per frame

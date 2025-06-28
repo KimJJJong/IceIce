@@ -50,6 +50,7 @@ public class icicle : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Kinematic;
             transform.position = new Vector2(transform.position.x, -screenHeight + spriteHeight / 2);
             isFalling = false;
+            gameObject.tag = "Ground";
         }
     }
 
@@ -70,36 +71,43 @@ public class icicle : MonoBehaviour
 
     void CheckCollisionWithPlatform()
     {
-        // icicle 하단 y좌표
-        float icicleBottomY = transform.position.y - spriteHeight / 2f;
+        // bottomPlatform의 Collider 가져오기
+        Collider2D platformCol = bottomPlatform.GetComponent<Collider2D>();
 
-        // platform 상단 y좌표
-        SpriteRenderer platformRenderer = bottomPlatform.GetComponent<SpriteRenderer>();
-        float platformHeight = platformRenderer.bounds.size.y;
-        float platformTopY = bottomPlatform.transform.position.y + platformHeight / 2f;
-
-        // platform x 좌표 범위
-        float platformLeftX = bottomPlatform.transform.position.x - platformRenderer.bounds.size.x / 2f;
-        float platformRightX = bottomPlatform.transform.position.x + platformRenderer.bounds.size.x / 2f;
-
-        // icicle 중심 x
-        float icicleX = transform.position.x;
-
-        // platform에 닿았는지 (y축 기준)
-        if (icicleBottomY <= platformTopY)
+        // 이 icicle의 Collider가 platform과 충돌하고 있는지 확인
+        if (col.IsTouching(platformCol))
         {
-            // ✅ platform 위에 있는 경우
-            if (icicleX >= platformLeftX && icicleX <= platformRightX)
+            // platform 위에 정확히 멈추게 설정
+            float platformTopY = platformCol.bounds.max.y;
+            float icicleHalfHeight = col.bounds.extents.y;
+            float newY = platformTopY + icicleHalfHeight;
+
+            // 낙하 정지 및 위치 보정
+            rb.velocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+            isFalling = false;
+        }
+    }
+
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // icicle 태그는 아직 Ground가 아닌 상태에서만
+        if (collision.gameObject.CompareTag("Untagged"))
+        {
+            // 플레이어 바닥 위치
+            float playerBottomY = col.bounds.min.y;
+
+            // 충돌 대상의 위쪽 위치
+            float targetTopY = collision.collider.bounds.max.y;
+
+            // 수직 거리 차이를 비교해서 바닥끼리 맞닿은 경우만 감지
+            if (Mathf.Abs(playerBottomY - targetTopY) < 0.05f)
             {
-                rb.velocity = Vector2.zero;
-                rb.bodyType = RigidbodyType2D.Kinematic;
-
-                float newY = platformTopY + spriteHeight / 2f;
-                transform.position = new Vector3(transform.position.x, newY, transform.position.z);
-
-                isFalling = false;
+                collision.gameObject.tag = "Ground";
+                Debug.Log("Icicle 태그가 Ground로 변경되었습니다.");
             }
-            // platform 범위를 벗어난 경우 → 계속 떨어져서 바닥에 멈추도록 둠
         }
     }
 }
