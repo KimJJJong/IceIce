@@ -21,6 +21,9 @@ public class UIManager : MonoBehaviour
     [Header("Game Over UI")]
     [SerializeField] private TextMeshProUGUI finalScoreText;
 
+    [Header("Drag Manager")]
+    [SerializeField] private GameObject dragManager;
+
 
     private void Awake()
     {
@@ -37,7 +40,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.Instance.PlayBGM("BGM_Lobby");
+        AudioManager.Instance.PlayBGM("BGM_InGame");
     }
 
 
@@ -48,15 +51,21 @@ public class UIManager : MonoBehaviour
         puzzlePagePanel.SetActive(true);
         movePagePanel.SetActive(false);
         gameOverPanel.SetActive(false);
+        
+        dragManager.SetActive(true);
     }
 
 
 
     public void OnClickStartButton()
     {
+        AudioManager.Instance.PlaySFX("SFX_ButtonClick");
+
         puzzlePagePanel.SetActive(false);
         movePagePanel.SetActive(true);
         gameOverPanel.SetActive(false);
+
+        dragManager.SetActive(false);
 
         TimeManager.Instance.StartGame();
     }
@@ -94,14 +103,18 @@ public class UIManager : MonoBehaviour
 
     public void OnClickRestartButton()
     {
-        //  ShowStartMenu();  // restart ±×³É SceneÀç ·Îµå? ±ÍÂúÀºµ­
+        AudioManager.Instance.PlaySFX("SFX_ButtonClick");
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        AudioManager.Instance.PlayBGM("BGM_Lobby");
     }
 
     public void OnClickSelectLevel()
     {
+        AudioManager.Instance.PlaySFX("SFX_ButtonClick");
+        AudioManager.Instance.PlayBGM("BGM_Lobby");
+
         SceneManager.LoadScene("PageSelectScene");
+
     }
 
     #endregion

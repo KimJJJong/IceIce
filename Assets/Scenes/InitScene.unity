@@ -605,7 +605,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.65
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -984,17 +984,19 @@ MonoBehaviour:
   sfxSource: {fileID: 1886595841}
   audioClips:
   - name: BGM_InGame
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 813f4da7a07f70e448a058c41f06e43b, type: 3}
   - name: BGM_Lobby
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: d482aeb7fa9723a42ad9e11c7509d0f2, type: 3}
   - name: SFX_Movement_Jump
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: eae4f39776371cd428ecbf255fa410e7, type: 3}
   - name: SFX_Movement_Walk
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 0b67664db4c9ce14eba7da9acff51f64, type: 3}
   - name: SFX_EatFish
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: ac4a6a1581ba5c345832965a9617de1c, type: 3}
   - name: SFX_Drop_Icicle
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: de3d63e584fba074f814bff2a82f6494, type: 3}
+  - name: SFX_ButtonClick
+    clip: {fileID: 8300000, guid: 2566a4e70d2bc8e4da9fe13cf030b4b2, type: 3}
 --- !u!4 &2088761375
 Transform:
   m_ObjectHideFlags: 0
