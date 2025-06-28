@@ -39,7 +39,7 @@ public class EffectManager : MonoBehaviour
         color.a = 0f;
         fadeImage.color = color;
         if (SceneManager.GetActiveScene().name is not "InitScene")
-        fadeImage.gameObject.SetActive(false);
+          fadeImage.gameObject.SetActive(false);
 
     }
 

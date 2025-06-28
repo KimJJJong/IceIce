@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlyingPlatform : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float destroyDelay = 10f;
+    //[SerializeField] private float destroyDelay = 10f;
     [SerializeField] private LayerMask wallLayer;
 
     private Rigidbody2D rb;
@@ -16,6 +16,12 @@ public class FlyingPlatform : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;  // 초기 정지
+        if (speed < 0)
+        {
+            Vector3 scale = transform.localScale;
+            scale.x = -Mathf.Abs(scale.x);  
+            transform.localScale = scale;
+        }
     }
 
     void OnMouseUp()
