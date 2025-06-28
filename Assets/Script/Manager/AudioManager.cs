@@ -14,7 +14,7 @@ public class AudioManager : MonoBehaviour
 
     private Dictionary<string, AudioClip> clipDict = new();
 
-    private float bgmVolume = 1.0f;
+    private float bgmVolume = 0.65f;
     private float sfxVolume = 1.0f;
 
     [System.Serializable]

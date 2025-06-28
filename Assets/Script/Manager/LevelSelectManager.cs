@@ -35,6 +35,7 @@ public class LevelSelectManager : MonoBehaviour
 
     private void OnLevelSelected(int levelIndex)
     {
+        AudioManager.Instance.PlaySFX("SFX_ButtonClick");
         Debug.Log($"레벨 {levelIndex} 선택됨");
         SceneManager.LoadScene($"Level_{levelIndex}"); // 씬 이름 규칙 예시: "Level_1", "Level_2"...
     }

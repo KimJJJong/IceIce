@@ -11,14 +11,10 @@ public class InitManager : MonoBehaviour
         AudioManager.Instance.PlayBGM("BGM_Lobby");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void OnClickStartGame()
     {
+        AudioManager.Instance.PlaySFX("SFX_ButtonClick");
         SceneManager.LoadScene("PageSelectScene");
     }
 }
