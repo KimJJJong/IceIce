@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
         float platformTopY = platformCol.bounds.max.y; // 플랫폼 상단 Y
         float playerHalfHeight = col.bounds.extents.y; // 플레이어 반 높이
 
-        transform.position = new Vector3(-4, platformTopY + playerHalfHeight + 0.01f, 0);
+        transform.position = new Vector3(-4, platformTopY + playerHalfHeight, 0);
         
     }
 
@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
         float platformTopY = platformCol.bounds.max.y; // 플랫폼 상단 Y
         float playerHalfHeight = col.bounds.extents.y; // 플레이어 반 높이
 
-        transform.position = new Vector3(-4, platformTopY + playerHalfHeight + 0.01f, 0);
+        transform.position = new Vector3(-4, platformTopY + playerHalfHeight, 0);
 
         HandleMove();
 
