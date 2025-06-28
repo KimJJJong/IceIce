@@ -30,8 +30,8 @@ public class LineDrag : MonoBehaviour
     public void StartDraw()
     {
         startPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        lineRenderer.SetPosition(0, startPos);
-        lineRenderer.SetPosition(1, startPos);
+        lineRenderer.SetPosition(0, new Vector3(startPos.x, startPos.y, -1f));
+        lineRenderer.SetPosition(1, new Vector3(startPos.x, startPos.y, -1f));
     }
 
     public void UpdateDraw()
