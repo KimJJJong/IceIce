@@ -1,34 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
-[RequireComponent(typeof(EdgeCollider2D))]
 public class DragManager : MonoBehaviour
 {
-    [Header("설정")]
-    [SerializeField] private float lineThickness = 0.1f;
-    [SerializeField] private Material lineMaterial;
+    [SerializeField] private GameObject linePrefab;
 
-    private LineRenderer lineRenderer;
-    private EdgeCollider2D edgeCollider;
-
-    private Vector2 startPos;
-    private Vector2 endPos;
-
-    void Awake()
-    {
-        lineRenderer = GetComponent<LineRenderer>();
-        edgeCollider = GetComponent<EdgeCollider2D>();
-
-        // 머티리얼 적용
-        if (lineMaterial != null)
-            lineRenderer.material = lineMaterial;
-
-        // 두께 설정 (시작/끝 동일하게)
-        lineRenderer.startWidth = lineThickness;
-        lineRenderer.endWidth = lineThickness;
-
-        lineRenderer.positionCount = 2;
-    }
+    private DragLine currentLine;
 
     void Update()
     {
@@ -36,35 +12,21 @@ public class DragManager : MonoBehaviour
         {
             StartDraw();
         }
-        else if (Input.GetMouseButton(0))
+        else if (Input.GetMouseButton(0) && currentLine != null)
         {
-            UpdateDraw();
+            currentLine.UpdateDraw();
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(0) && currentLine != null)
         {
-            FinalizeDraw();
+            currentLine.FinalizeDraw();
+            currentLine = null;
         }
     }
 
     private void StartDraw()
     {
-        startPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        lineRenderer.SetPosition(0, startPos);
-        lineRenderer.SetPosition(1, startPos);
-    }
-
-    private void UpdateDraw()
-    {
-        endPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        lineRenderer.SetPosition(1, endPos);
-    }
-
-    private void FinalizeDraw()
-    {
-        Vector2[] colliderPoints = new Vector2[2];
-        colliderPoints[0] = startPos;
-        colliderPoints[1] = endPos;
-
-        edgeCollider.points = colliderPoints;
+        GameObject lineObj = Instantiate(linePrefab);
+        currentLine = lineObj.GetComponent<DragLine>();
+        currentLine.StartDraw();
     }
 }
