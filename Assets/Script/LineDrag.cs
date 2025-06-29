@@ -84,6 +84,7 @@ public class LineDrag : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log($"충돌 감지: {collision.gameObject.name}");
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
