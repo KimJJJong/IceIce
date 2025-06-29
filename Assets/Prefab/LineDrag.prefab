@@ -167,7 +167,7 @@ EdgeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2a5a1b12c8b0a42b8f8454ed7267f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyDelay: 1
+  destroyDelay: 0.2
   lineThickness: 0.1
   lineMaterial: {fileID: 2100000, guid: ca4b8e804306ff340b09291645317069, type: 2}
   minLength: 1
